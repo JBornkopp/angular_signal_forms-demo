@@ -1,0 +1,20 @@
+<div
+  role="radiogroup"
+  aria-label="Rating"
+  class="rating"
+>
+  @for (_ of ratingArray(); let index = $index; track index) {
+    @let filled = index < hoveredRatingOrSelectedRating();
+    <mat-icon
+      role="radio"
+      tabindex="0"
+      [attr.aria-checked]="rating() === index + 1"
+      (click)="setRating(index + 1)"
+      (keydown.enter)="setRating(index + 1)"
+      (mouseenter)="startHover(index +1)"
+      (mouseleave)="endHover()"
+      [fontIcon]=" filled ? 'star' : 'star_outline'"
+      [ngClass]="{ filled: filled }"
+    ></mat-icon>
+  }
+</div>
