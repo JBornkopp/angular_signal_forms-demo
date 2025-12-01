@@ -21,7 +21,7 @@ export class ReactiveFormRating implements ControlValueAccessor {
   public maxRating = input(5);
   protected rating = signal(0);
   protected hoveredRating = signal<number | null>(null);
-  private disabled = signal(false);
+  protected disabled = signal(false);
 
   protected ratingArray = computed(() => Array(this.maxRating()).fill(''));
   protected hoveredRatingOrSelectedRating = computed(() => {
@@ -43,18 +43,28 @@ export class ReactiveFormRating implements ControlValueAccessor {
     this.onTouch = fn;
   }
   public setDisabledState(isDisabled: boolean): void {
-    this.disabled.set(isDisabled);
+    if (!this.disabled()) {
+      this.disabled.set(isDisabled);
+    }
   }
 
   protected setRating(newRating: number): void {
-    this.rating.set(newRating);
+    if (!this.disabled()) {
+      this.rating.set(newRating);
+      this.onChange(newRating);
+      this.onTouch();
+    }
   }
 
   protected startHover(index: number): void {
-    this.hoveredRating.set(index);
+    if (!this.disabled()) {
+      this.hoveredRating.set(index);
+    }
   }
 
   protected endHover(): void {
-    this.hoveredRating.set(null);
+    if (!this.disabled()) {
+      this.hoveredRating.set(null);
+    }
   }
 }
