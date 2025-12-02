@@ -1,0 +1,21 @@
+@import url('https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined');
+
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  outline: none;
+  cursor: pointer;
+  padding: 1.5rem;
+  flex: 1;
+
+  .expand-icon {
+    font-size: 1.5rem;
+    color: var(--quaternary-contrast);
+    transition: transform .3s ease-out;
+  }
+
+  .expand-icon__expanded {
+    transform: rotate(180deg);
+  }
+}

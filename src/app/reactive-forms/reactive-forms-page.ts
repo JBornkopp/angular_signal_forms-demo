@@ -1,4 +1,6 @@
-import { ChangeDetectorRef, Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { AccordionContent, AccordionGroup, AccordionPanel, AccordionTrigger } from '@angular/aria/accordion';
+import { ChangeDetectorRef, Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { AccordionTitle } from '../shared/accordion-title/accordion-title';
 import { ReactiveFormRating } from './reactive-form-rating/reactive-form-rating';
 import { PageHeader } from '../shared/page-header/page-header';
 import { MatDialog } from '@angular/material/dialog';
@@ -44,6 +46,11 @@ export type ReactiveMovieFormEntryValue = ReturnType<ReactiveMovieFormEntry['get
     MatCheckbox,
     MatIcon,
     MatError,
+    AccordionGroup,
+    AccordionTrigger,
+    AccordionTitle,
+    AccordionPanel,
+    AccordionContent
   ],
   templateUrl: './reactive-forms-page.html',
   styleUrl: './reactive-forms-page.scss',
@@ -65,6 +72,8 @@ export class ReactiveFormsPage implements OnInit {
   protected readonly priorityLevels = priorityLevels;
   protected readonly streamingServices = streamingServices;
   protected readonly movieGenres = movieGenres;
+
+  protected readonly autExpandedFormEntry = signal<number>(0)
 
   public ngOnInit(): void {
     const previouslySaved = this.localStorage.readEntry<ReactiveMovieFormEntryValue[]>(
@@ -98,6 +107,7 @@ export class ReactiveFormsPage implements OnInit {
     this.movieFormArray.push(this.createMovieForm({ ...created, watched: false, rating: null }));
     // todo: check if this can be omitted
     this.cdr.detectChanges();
+    this.autExpandedFormEntry.set(this.movieFormArray.length -1);
   }
 
   protected onAddEntry(): void {
@@ -126,6 +136,10 @@ export class ReactiveFormsPage implements OnInit {
       horizontalPosition: 'end',
       verticalPosition: 'bottom',
     });
+  }
+
+  protected createPanelId(entryIndex: number): string {
+    return `reactive-panel-${entryIndex}`;
   }
 }
 

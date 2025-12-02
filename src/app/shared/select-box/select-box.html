@@ -1,0 +1,23 @@
+<div ngCombobox class="material-select" readonly>
+  <div #origin class="select">
+    <span class="combobox-label">
+      <span class="selected-label-text">{{ displayValue() }}</span>
+    </span>
+    <input aria-label="Label dropdown" placeholder="Select an entry" ngComboboxInput />
+    <span class="arrow material-symbols-outlined" translate="no">arrow_drop_down</span>
+  </div>
+  <ng-template ngComboboxPopupContainer>
+    <ng-template
+      [cdkConnectedOverlay]="{origin, usePopover: 'inline', matchWidth: true}"
+      [cdkConnectedOverlayOpen]="true"
+    >
+      <div class="popup-container">
+        <div ngListbox>
+          @for (entry of entries(); track entry) {
+            <app-select-box-entry [value]="entry"></app-select-box-entry>
+          }
+        </div>
+      </div>
+    </ng-template>
+  </ng-template>
+</div>

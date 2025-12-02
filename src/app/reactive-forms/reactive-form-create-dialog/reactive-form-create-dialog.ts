@@ -2,10 +2,9 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import {
   MatDialogActions,
-  MatDialogClose,
   MatDialogContent,
   MatDialogRef,
-  MatDialogTitle,
+  MatDialogTitle
 } from '@angular/material/dialog';
 import { MatFormField, MatHint, MatInput, MatLabel } from '@angular/material/input';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -23,7 +22,6 @@ export type ReactiveFormsCreatedMovie = ReturnType<
   imports: [
     MatButton,
     MatDialogActions,
-    MatDialogClose,
     MatDialogContent,
     MatDialogTitle,
     MatFormField,
@@ -32,11 +30,11 @@ export type ReactiveFormsCreatedMovie = ReturnType<
     MatHint,
     ReactiveFormsModule,
     MatSelect,
-    MatOption,
+    MatOption
   ],
   templateUrl: './reactive-form-create-dialog.html',
   styleUrl: './reactive-form-create-dialog.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ReactiveFormCreateDialog {
   private readonly dialogRef = inject(MatDialogRef<ReactiveFormCreateDialog>);
@@ -47,13 +45,17 @@ export class ReactiveFormCreateDialog {
     genre: this.fb.control<MovieGenre | null>(null, [Validators.required]),
     streamingService: this.fb.control<StreamingService | null>(null, [Validators.required]),
     runtime: this.fb.control<number | null>(null, [Validators.min(1)]),
-    priority: this.fb.control<PriorityLevel | null>(null, [Validators.required]),
+    priority: this.fb.control<PriorityLevel | null>(null, [Validators.required])
   });
 
   protected onCreate(): void {
     if (this.movieForm.valid) {
       this.dialogRef.close(this.movieForm.getRawValue());
     }
+  }
+
+  protected onClose(): void {
+    this.dialogRef.close(undefined);
   }
 
   protected readonly movieGenres = movieGenres;
