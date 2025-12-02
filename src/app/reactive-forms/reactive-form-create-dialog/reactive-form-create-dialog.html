@@ -1,6 +1,53 @@
 <h3 mat-dialog-title>Add Entry</h3>
 <mat-dialog-content>
-  <!--  todo: add form components-->
+  <form [formGroup]="movieForm" (ngSubmit)="onCreate()">
+    <mat-form-field>
+      <mat-label>Title</mat-label>
+      <input
+        matInput
+        placeholder="Add the title of the movie"
+        [formControl]="movieForm.controls.title"
+      >
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Genre</mat-label>
+      <mat-select [formControl]="movieForm.controls.genre">
+        @for (genre of movieGenres; track genre) {
+          <mat-option [value]="genre">{{ genre }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Where to watch</mat-label>
+      <mat-select [formControl]="movieForm.controls.streamingService">
+        @for (streamingService of streamingServices; track streamingService) {
+          <mat-option [value]="streamingService">{{ streamingService }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Runtime</mat-label>
+      <input
+        matInput
+        type="number"
+        placeholder="Add the runtime of the movie"
+        [formControl]="movieForm.controls.runtime"
+      >
+      <mat-hint>In minutes</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Priority</mat-label>
+      <mat-select [formControl]="movieForm.controls.priority">
+        @for (priority of priorityLevels; track priority) {
+          <mat-option [value]="priority">{{ priority }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </form>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button matButton mat-dialog-close>Cancel</button>

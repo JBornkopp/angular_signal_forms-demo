@@ -19,7 +19,7 @@ import { MatIcon } from '@angular/material/icon';
 })
 export class ReactiveFormRating implements ControlValueAccessor {
   public maxRating = input(5);
-  protected rating = signal(1);
+  protected rating = signal<number | null>(null);
   protected hoveredRating = signal<number | null>(null);
   protected disabled = signal(false);
 
@@ -27,7 +27,7 @@ export class ReactiveFormRating implements ControlValueAccessor {
   protected hoveredRatingOrSelectedRating = computed(() => {
     const hovered = this.hoveredRating();
     const selected = this.rating();
-    return hovered !== null ? hovered : selected;
+    return hovered !== null ? hovered : selected !== null ? selected : 0;
   });
 
   public onChange: any = () => {};
@@ -59,9 +59,7 @@ export class ReactiveFormRating implements ControlValueAccessor {
 
   protected setRating(newRating: number): void {
     if (!this.disabled()) {
-      this.rating.set(newRating);
-      this.onChange(newRating);
-      this.onTouch();
+      this.setRatingValue(newRating);
     }
   }
 
@@ -75,5 +73,15 @@ export class ReactiveFormRating implements ControlValueAccessor {
     if (!this.disabled()) {
       this.hoveredRating.set(null);
     }
+  }
+
+  protected resetRating(): void {
+    this.setRatingValue(null);
+  }
+
+  private setRatingValue(value: number | null): void {
+    this.rating.set(value);
+    this.onChange(value);
+    this.onTouch();
   }
 }

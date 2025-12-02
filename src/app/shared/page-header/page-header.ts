@@ -11,8 +11,13 @@ import { MatButton } from '@angular/material/button';
 export class PageHeader {
   public title = input.required<string>();
   public addEntry = output();
+  public save = output();
 
   protected onAddEntry(): void {
     this.addEntry.emit();
+  }
+
+  protected onSave(): void {
+    this.save.emit();
   }
 }

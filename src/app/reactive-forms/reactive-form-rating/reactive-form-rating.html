@@ -6,6 +6,7 @@
   @for (_ of ratingArray(); let index = $index; track index) {
     @let filled = index < hoveredRatingOrSelectedRating();
     <mat-icon
+      class="star"
       role="radio"
       [attr.tabindex]="disabled() ? -1 : 0"
       [attr.aria-checked]="rating() === index + 1"
@@ -18,3 +19,4 @@
     ></mat-icon>
   }
 </div>
+<mat-icon class="undo" fontIcon="undo_outline" (click)="resetRating()"/>

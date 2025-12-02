@@ -1,5 +1,108 @@
 <app-page-header
   title="Reactive Form Watchlist"
   (addEntry)="onAddEntry()"
+  (save)="onSave()"
 />
-<app-reactive-form-rating/>
+<form>
+<!--  todo: replace with accordion-->
+  @for (entry of movieFormArray.controls; track entry; let index = $index; let last = $last) {
+    <div class="movie-entry">
+      <div class="entry-header">
+        <span>{{entry.controls.title.getRawValue()}}</span>
+        <div class="icons">
+          @if (entry.controls.watched.getRawValue()) {
+            <mat-icon fontIcon="visibility"/>
+          } @else {
+            <mat-icon fontIcon="visibility_off"/>
+          }
+          <mat-icon
+            fontIcon="delete"
+            (click)="onDelete(index, entry.controls.title.getRawValue())"
+            (keydown.enter)="onDelete(index, entry.controls.title.getRawValue())"
+          />
+        </div>
+      </div>
+      <div class="movie-form">
+        <mat-form-field>
+          <mat-label>Title</mat-label>
+          <input
+            matInput
+            placeholder="Add the title of the movie"
+            [formControl]="entry.controls.title"
+          >
+          @if (entry.controls.title.hasError('required')) {
+            <mat-error>The title is required!</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Genre</mat-label>
+          <mat-select [formControl]="entry.controls.genre">
+            @for (genre of movieGenres; track genre) {
+              <mat-option [value]="genre">{{ genre }}</mat-option>
+            }
+          </mat-select>
+          @if (entry.controls.genre.hasError('required')) {
+            <mat-error>The title is required!</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Where to watch</mat-label>
+          <mat-select [formControl]="entry.controls.streamingService">
+            @for (streamingService of streamingServices; track streamingService) {
+              <mat-option [value]="streamingService">{{ streamingService }}</mat-option>
+            }
+          </mat-select>
+          @if (entry.controls.streamingService.hasError('required')) {
+            <mat-error>The title is required!</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Runtime</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Add the runtime of the movie"
+            [formControl]="entry.controls.runtime"
+          >
+          <mat-hint>In minutes</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Priority</mat-label>
+          <mat-select [formControl]="entry.controls.priority">
+            @for (priority of priorityLevels; track priority) {
+              <mat-option [value]="priority">{{ priority }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <div class="form-entry watched-container">
+          <div class="content">
+            <mat-checkbox [formControl]="entry.controls.watched">Watched</mat-checkbox>
+          </div>
+          <div class="error"></div>
+        </div>
+
+        <div class="form-entry rating-container">
+          <div class="content">
+            <mat-label>Rating</mat-label>
+            <app-reactive-form-rating [formControl]="entry.controls.rating" />
+          </div>
+          <div class="error">
+            @if (entry.controls.rating.hasError('rating-applied-but-not-watched')) {
+              <mat-error>The rating can only be applied when the movie was watched!</mat-error>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+    @if (!last) {
+      <hr>
+    }
+  } @empty {
+    There are no entries in your watchlist!
+  }
+</form>
