@@ -92,6 +92,14 @@
               height: 56px;
             }
 
+            .select-box-content {
+              flex: 1;
+            }
+
+            .select-box-label {
+              padding: 4px;
+            }
+
             .error {
               height: 19.5px;
             }
@@ -107,6 +115,13 @@
             display: flex;
             flex-direction: column;
             padding: 0 16px;
+          }
+
+          .select-box-container {
+            display: flex;
+            flex-direction: row;
+            padding: 0 16px;
+            gap: 16px;
           }
         }
       }

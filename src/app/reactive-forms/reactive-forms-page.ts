@@ -1,28 +1,27 @@
 import { AccordionContent, AccordionGroup, AccordionPanel, AccordionTrigger } from '@angular/aria/accordion';
-import { ChangeDetectorRef, Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, DestroyRef, inject, OnInit, Signal, signal } from '@angular/core';
 import { AccordionTitle } from '../shared/accordion-title/accordion-title';
+import { SelectBox } from '../shared/select-box/select-box';
 import { ReactiveFormRating } from './reactive-form-rating/reactive-form-rating';
 import { PageHeader } from '../shared/page-header/page-header';
 import { MatDialog } from '@angular/material/dialog';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   ReactiveFormsCreatedMovie,
-  ReactiveFormCreateDialog,
+  ReactiveFormCreateDialog
 } from './reactive-form-create-dialog/reactive-form-create-dialog';
 import {
   AbstractControl,
-  FormBuilder,
+  FormBuilder, FormControl,
   ReactiveFormsModule,
   ValidationErrors,
   ValidatorFn,
-  Validators,
+  Validators
 } from '@angular/forms';
-import { MovieGenre, movieGenres } from '../shared/entities/movie-genre';
-import { StreamingService, streamingServices } from '../shared/entities/streaming-service';
-import { PriorityLevel, priorityLevels } from '../shared/entities/priority-levels';
+import { isMovieGenre, MovieGenre, movieGenres } from '../shared/entities/movie-genre';
+import { isStreamingService, StreamingService, streamingServices } from '../shared/entities/streaming-service';
+import { isPriorityLevel, PriorityLevel, priorityLevels } from '../shared/entities/priority-levels';
 import { MatError, MatFormField, MatHint, MatInput, MatLabel } from '@angular/material/input';
-import { MatOption } from '@angular/material/core';
-import { MatSelect } from '@angular/material/select';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatIcon } from '@angular/material/icon';
 import { LocalStorage } from '../shared/local-storage.service';
@@ -40,8 +39,6 @@ export type ReactiveMovieFormEntryValue = ReturnType<ReactiveMovieFormEntry['get
     MatHint,
     MatInput,
     MatLabel,
-    MatOption,
-    MatSelect,
     ReactiveFormsModule,
     MatCheckbox,
     MatIcon,
@@ -50,10 +47,11 @@ export type ReactiveMovieFormEntryValue = ReturnType<ReactiveMovieFormEntry['get
     AccordionTrigger,
     AccordionTitle,
     AccordionPanel,
-    AccordionContent
+    AccordionContent,
+    SelectBox
   ],
   templateUrl: './reactive-forms-page.html',
-  styleUrl: './reactive-forms-page.scss',
+  styleUrl: './reactive-forms-page.scss'
 })
 export class ReactiveFormsPage implements OnInit {
   private readonly dialog = inject(MatDialog);
@@ -66,18 +64,18 @@ export class ReactiveFormsPage implements OnInit {
   private readonly localStorageKey = 'reactive-forms';
   private readonly movieFormArrayInitialValue: ReactiveMovieFormEntry[] = [];
   protected readonly movieFormArray = this.fb.nonNullable.array<ReactiveMovieFormEntry>(
-    this.movieFormArrayInitialValue,
+    this.movieFormArrayInitialValue
   );
 
-  protected readonly priorityLevels = priorityLevels;
-  protected readonly streamingServices = streamingServices;
-  protected readonly movieGenres = movieGenres;
+  protected readonly movieGenres: Signal<MovieGenre[]> = computed(() => Object.values(movieGenres));
+  protected readonly priorityLevels: Signal<PriorityLevel[]> = computed(() => Object.values(priorityLevels));
+  protected readonly streamingServices: Signal<StreamingService[]> = computed(() => Object.values(streamingServices));
 
-  protected readonly autExpandedFormEntry = signal<number>(0)
+  protected readonly autExpandedFormEntry = signal<number>(0);
 
   public ngOnInit(): void {
     const previouslySaved = this.localStorage.readEntry<ReactiveMovieFormEntryValue[]>(
-      this.localStorageKey,
+      this.localStorageKey
     );
     if (previouslySaved) {
       previouslySaved.forEach((entry) => this.movieFormArray.push(this.createMovieForm(entry)));
@@ -88,18 +86,18 @@ export class ReactiveFormsPage implements OnInit {
 
   // explicitly set no return type do derive form array type from here
   private createMovieForm(
-    created: ReactiveFormsCreatedMovie & { watched: boolean; rating: number | null },
+    created: ReactiveFormsCreatedMovie & { watched: boolean; rating: number | null }
   ) {
     return this.fb.nonNullable.group({
       title: this.fb.nonNullable.control(created.title, [Validators.required]),
       genre: this.fb.control<MovieGenre | null>(created.genre, [Validators.required]),
       streamingService: this.fb.control<StreamingService | null>(created.streamingService, [
-        Validators.required,
+        Validators.required
       ]),
       runtime: this.fb.control<number | null>(created.runtime, [Validators.min(1)]),
       priority: this.fb.control<PriorityLevel | null>(created.priority, [Validators.required]),
       watched: this.fb.nonNullable.control<boolean>(created.watched),
-      rating: this.fb.control<number | null>(created.rating, [ratingAppliedWatchedValidator()]),
+      rating: this.fb.control<number | null>(created.rating, [ratingAppliedWatchedValidator()])
     });
   }
 
@@ -107,7 +105,7 @@ export class ReactiveFormsPage implements OnInit {
     this.movieFormArray.push(this.createMovieForm({ ...created, watched: false, rating: null }));
     // todo: check if this can be omitted
     this.cdr.detectChanges();
-    this.autExpandedFormEntry.set(this.movieFormArray.length -1);
+    this.autExpandedFormEntry.set(this.movieFormArray.length - 1);
   }
 
   protected onAddEntry(): void {
@@ -126,7 +124,7 @@ export class ReactiveFormsPage implements OnInit {
     this.localStorage.writeEntry(this.localStorageKey, this.movieFormArray.getRawValue());
     this.snackBar.open('Saved all entries to local storage!', '', {
       horizontalPosition: 'end',
-      verticalPosition: 'bottom',
+      verticalPosition: 'bottom'
     });
   }
 
@@ -134,12 +132,26 @@ export class ReactiveFormsPage implements OnInit {
     this.movieFormArray.removeAt(index);
     this.snackBar.open(`${title} was removed!`, '', {
       horizontalPosition: 'end',
-      verticalPosition: 'bottom',
+      verticalPosition: 'bottom'
     });
   }
 
-  protected createPanelId(entryIndex: number): string {
-    return `reactive-panel-${entryIndex}`;
+  protected onMovieGenreSelect(selected: string | undefined, control: FormControl<MovieGenre | null>): void {
+    if (selected !== undefined) {
+      control.patchValue(isMovieGenre(selected) ? selected : null);
+    }
+  }
+
+  protected onPriorityLevelSelect(selected: string | undefined, control: FormControl<PriorityLevel | null>): void {
+    if (selected !== undefined) {
+      control.patchValue(isPriorityLevel(selected) ? selected : null);
+    }
+  }
+
+  protected onSteamingServiceSelect(selected: string | undefined, control: FormControl<StreamingService | null>): void {
+    if (selected !== undefined) {
+      control.patchValue(isStreamingService(selected) ? selected : null);
+    }
   }
 }
 
