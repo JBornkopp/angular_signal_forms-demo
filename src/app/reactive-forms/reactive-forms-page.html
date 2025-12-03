@@ -123,7 +123,19 @@
         </ng-template>
       </div>
     } @empty {
-      There are no entries in your watchlist!
+      <div ngAccordionTrigger panelId="empty" #triggerEmpty="ngAccordionTrigger"
+           [expanded]="true">
+        <app-accordion-title [isExpanded]="triggerEmpty.expanded()">
+          No entry.
+        </app-accordion-title>
+      </div>
+      <div ngAccordionPanel panelId="empty">
+        <ng-template ngAccordionContent>
+          <div class="movie-entry">
+            There are no entries in your watchlist!
+          </div>
+        </ng-template>
+      </div>
     }
   </div>
 </form>
