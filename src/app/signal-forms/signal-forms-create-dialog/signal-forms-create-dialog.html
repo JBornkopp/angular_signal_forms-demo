@@ -1,6 +1,59 @@
 <h3 mat-dialog-title>Add Entry</h3>
 <mat-dialog-content>
-<!--  todo: add form components-->
+  <form>
+    <mat-form-field>
+      <mat-label>Title</mat-label>
+      <input
+        matInput
+        placeholder="Add the title of the movie"
+        [field]="movieForm.title"
+      >
+      @if (movieForm.title().dirty() && movieForm.title().touched()) {
+        @for (error of movieForm.title().errors(); track error.kind) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
+      <mat-error></mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Genre</mat-label>
+      <mat-select [field]="movieForm.genre">
+        @for (genre of movieGenres; track genre) {
+          <mat-option [value]="genre">{{ genre }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Where to watch</mat-label>
+      <mat-select [field]="movieForm.streamingService">
+        @for (streamingService of streamingServices; track streamingService) {
+          <mat-option [value]="streamingService">{{ streamingService }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Runtime</mat-label>
+      <input
+        matInput
+        type="number"
+        placeholder="Add the runtime of the movie"
+        [field]="movieForm.runtime"
+      >
+      <mat-hint>In minutes</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Priority</mat-label>
+      <mat-select [field]="movieForm.priority">
+        @for (priority of priorityLevels; track priority) {
+          <mat-option [value]="priority">{{ priority }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </form>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button matButton mat-dialog-close>Cancel</button>
