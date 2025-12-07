@@ -40,7 +40,7 @@
         matInput
         type="number"
         placeholder="Add the runtime of the movie"
-        [field]="movieForm.runtime"
+        [field]="movieForm.runtime | nullableField"
       >
       <mat-hint>In minutes</mat-hint>
     </mat-form-field>

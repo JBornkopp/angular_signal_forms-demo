@@ -1,11 +1,13 @@
 import { AccordionContent, AccordionGroup, AccordionPanel, AccordionTrigger } from '@angular/aria/accordion';
-import { ChangeDetectorRef, Component, computed, DestroyRef, inject, OnInit, Signal, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, OnInit, Signal, signal } from '@angular/core';
+import { catchError, map, startWith } from 'rxjs';
 import { AccordionTitle } from '../shared/accordion-title/accordion-title';
 import { SelectBox } from '../shared/select-box/select-box';
 import { ReactiveFormRating } from './reactive-form-rating/reactive-form-rating';
 import { PageHeader } from '../shared/page-header/page-header';
 import { MatDialog } from '@angular/material/dialog';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import * as _ from 'lodash';
 import {
   ReactiveFormsCreatedMovie,
   ReactiveFormCreateDialog
@@ -51,27 +53,38 @@ export type ReactiveMovieFormEntryValue = ReturnType<ReactiveMovieFormEntry['get
     SelectBox
   ],
   templateUrl: './reactive-forms-page.html',
-  styleUrl: './reactive-forms-page.scss'
+  styleUrl: './reactive-forms-page.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ReactiveFormsPage implements OnInit {
   private readonly dialog = inject(MatDialog);
   private readonly destroyRef = inject(DestroyRef);
   private readonly fb = inject(FormBuilder);
-  private readonly cdr = inject(ChangeDetectorRef);
   private readonly localStorage = inject(LocalStorage);
   private readonly snackBar = inject(MatSnackBar);
 
   private readonly localStorageKey = 'reactive-forms';
   private readonly movieFormArrayInitialValue: ReactiveMovieFormEntry[] = [];
-  protected readonly movieFormArray = this.fb.nonNullable.array<ReactiveMovieFormEntry>(
+  private readonly movieFormArray = this.fb.nonNullable.array<ReactiveMovieFormEntry>(
     this.movieFormArrayInitialValue
   );
+
+  protected readonly movieForm = computed(() => this.movieFormArray);
+  private readonly initialFormValue = signal(this.movieForm().getRawValue());
+  private readonly currentFormValue = toSignal(this.movieForm().valueChanges.pipe(
+      startWith(undefined),
+      map(() => this.movieForm().getRawValue()),
+      catchError(() => this.movieFormArrayInitialValue)),
+    { requireSync: true }
+  );
+
+  protected readonly hasChanges = computed(() => !_.isEqual(this.initialFormValue(), this.currentFormValue()));
 
   protected readonly movieGenres: Signal<MovieGenre[]> = computed(() => Object.values(movieGenres));
   protected readonly priorityLevels: Signal<PriorityLevel[]> = computed(() => Object.values(priorityLevels));
   protected readonly streamingServices: Signal<StreamingService[]> = computed(() => Object.values(streamingServices));
 
-  protected readonly autExpandedFormEntry = signal<number>(0);
+  protected readonly autoExpandedFormEntry = signal<number>(0);
 
   public ngOnInit(): void {
     const previouslySaved = this.localStorage.readEntry<ReactiveMovieFormEntryValue[]>(
@@ -79,8 +92,7 @@ export class ReactiveFormsPage implements OnInit {
     );
     if (previouslySaved) {
       previouslySaved.forEach((entry) => this.movieFormArray.push(this.createMovieForm(entry)));
-      // todo: check if this can be omitted
-      this.cdr.detectChanges();
+      this.initialFormValue.set(this.movieFormArray.getRawValue());
     }
   }
 
@@ -103,9 +115,7 @@ export class ReactiveFormsPage implements OnInit {
 
   private createAndAddMovieFormEntry(created: ReactiveFormsCreatedMovie): void {
     this.movieFormArray.push(this.createMovieForm({ ...created, watched: false, rating: null }));
-    // todo: check if this can be omitted
-    this.cdr.detectChanges();
-    this.autExpandedFormEntry.set(this.movieFormArray.length - 1);
+    this.autoExpandedFormEntry.set(this.movieFormArray.length - 1);
   }
 
   protected onAddEntry(): void {
@@ -121,7 +131,7 @@ export class ReactiveFormsPage implements OnInit {
   }
 
   protected onSave(): void {
-    this.localStorage.writeEntry(this.localStorageKey, this.movieFormArray.getRawValue());
+    this.localStorage.writeEntry(this.localStorageKey, this.currentFormValue());
     this.snackBar.open('Saved all entries to local storage!', '', {
       horizontalPosition: 'end',
       verticalPosition: 'bottom'

@@ -6,6 +6,7 @@ import {
   MatDialogTitle,
 } from '@angular/material/dialog';
 import { MatButton } from '@angular/material/button';
+import { NullableFieldCoercionPipe } from '../singal-forms-nullable-field.pipe';
 import { SignalFormCreatedMovie } from './signal-form-created-movie';
 import { Field, form, min, required } from '@angular/forms/signals';
 import { FormsModule } from '@angular/forms';
@@ -26,13 +27,14 @@ import { movieGenres } from '../../shared/entities/movie-genre';
     MatDialogClose,
     FormsModule,
     MatFormField,
-    MatHint,
     MatInput,
     MatLabel,
     MatOption,
     MatSelect,
     Field,
     MatError,
+    MatHint,
+    NullableFieldCoercionPipe
   ],
   templateUrl: './signal-forms-create-dialog.html',
   styleUrl: './signal-forms-create-dialog.scss',

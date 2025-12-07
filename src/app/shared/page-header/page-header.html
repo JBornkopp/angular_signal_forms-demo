@@ -1,3 +1,3 @@
 <h2>{{title()}}</h2>
 <button mat-button (click)="onAddEntry()">Add Entry</button>
-<button mat-button (click)="onSave()">Save</button>
+<button mat-button [disabled]="!hasChanges()" (click)="onSave()">Save</button>

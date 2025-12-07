@@ -1,13 +1,14 @@
 <app-page-header
   title="Reactive Form Watchlist"
+  [hasChanges]="hasChanges()"
   (addEntry)="onAddEntry()"
   (save)="onSave()"
 />
 <form>
   <div ngAccordionGroup class="basic-accordion" [multiExpandable]="false">
-    @for (entry of movieFormArray.controls; track entry; let index = $index; let last = $last) {
+    @for (entry of movieForm().controls; track entry; let index = $index; let last = $last) {
       <div ngAccordionTrigger [panelId]="`form-entry-${index}`" #trigger="ngAccordionTrigger"
-           [expanded]="index === autExpandedFormEntry()">
+           [expanded]="index === autoExpandedFormEntry()">
         <app-accordion-title [isExpanded]="trigger.expanded()">
           <div class="entry-header">
             <div class="title-container">
