@@ -10,6 +10,7 @@ export const movieGenres = [
   'Mystery',
   'Documentary',
 ] as const;
+export const movieGenreValues = Object.values(movieGenres);
 export type MovieGenre = (typeof movieGenres)[number];
 
 export function isMovieGenre(value: string): value is MovieGenre {

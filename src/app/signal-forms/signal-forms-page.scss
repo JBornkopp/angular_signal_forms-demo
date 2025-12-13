@@ -1,0 +1,130 @@
+:host {
+  display: flex;
+  flex-direction: column;
+
+  app-page-header {
+    flex: 0;
+  }
+
+  form {
+    flex: 1;
+    overflow: hidden;
+
+    [ngAccordionGroup] {
+      flex: 1;
+
+      [ngAccordionTrigger] {
+        display: flex;
+        outline: none;
+        cursor: pointer;
+
+        .entry-header {
+          display: flex;
+          flex-direction: row;
+          flex: 1;
+          gap: 16px;
+          justify-content: space-between;
+          align-items: center;
+
+          .title-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            .entry-title {
+              font-size: 20pt;
+            }
+
+            .watched-icon {
+              color: green;
+            }
+
+            .not-watched-icon {
+              color: red;
+            }
+          }
+
+          .delete-icon {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+          }
+        }
+
+        &[aria-expanded='true'] {
+          box-shadow: 0 4px 2px -2px gray;
+        }
+
+        &[aria-disabled='true'] {
+          opacity: 0.5;
+          cursor: default;
+        }
+      }
+
+      .movie-entry {
+        display: flex;
+        flex-direction: column;
+        padding: 1.5rem;
+
+        .movie-form {
+          display: grid;
+          grid-template-rows: auto;
+          grid-template-columns: 1fr;
+          gap: 8px;
+
+          @media (min-width: 600px) and (max-width: 1199px) {
+            grid-template-columns: 1fr 1fr;
+          }
+
+          @media (min-width: 1200px) and (max-width: 1599px) {
+            grid-template-columns: 1fr 1fr 1fr;
+          }
+
+          @media (min-width: 1600px) {
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+          }
+
+          .form-entry {
+            display: flex;
+            flex-direction: column;
+
+            .content {
+              height: 56px;
+            }
+
+            .select-box-content {
+              flex: 1;
+            }
+
+            .select-box-label {
+              padding: 4px;
+            }
+
+            .error {
+              height: 19.5px;
+            }
+          }
+
+          .watched-container {
+            display: flex;
+            align-items: center;
+            padding: 0 16px 0 8px;
+          }
+
+          .rating-container {
+            display: flex;
+            flex-direction: column;
+            padding: 0 16px;
+          }
+
+          .select-box-container {
+            display: flex;
+            flex-direction: row;
+            padding: 0 16px;
+            gap: 16px;
+          }
+        }
+      }
+    }
+  }
+}

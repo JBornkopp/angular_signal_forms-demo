@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import {
   MatDialogActions,
   MatDialogClose,
   MatDialogContent,
+  MatDialogRef,
   MatDialogTitle,
 } from '@angular/material/dialog';
 import { MatButton } from '@angular/material/button';
@@ -34,13 +35,15 @@ import { movieGenres } from '../../shared/entities/movie-genre';
     Field,
     MatError,
     MatHint,
-    NullableFieldCoercionPipe
+    NullableFieldCoercionPipe,
   ],
   templateUrl: './signal-forms-create-dialog.html',
   styleUrl: './signal-forms-create-dialog.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignalFormsCreateDialog {
+  private readonly dialogRef = inject(MatDialogRef<SignalFormCreatedMovie>);
+
   private createdMovie = signal<SignalFormCreatedMovie>({
     title: '',
     genre: null,
@@ -65,7 +68,15 @@ export class SignalFormsCreateDialog {
     min(schemaPath.runtime, 1, { message: 'Runtime must be at least 1 minute' });
   });
 
-  protected onCreate(): void {}
+  protected onCreate(): void {
+    if (this.movieForm().valid()) {
+      this.dialogRef.close(this.createdMovie());
+    }
+  }
+
+  protected onClose(): void {
+    this.dialogRef.close(undefined);
+  }
 
   protected readonly priorityLevels = priorityLevels;
   protected readonly streamingServices = streamingServices;

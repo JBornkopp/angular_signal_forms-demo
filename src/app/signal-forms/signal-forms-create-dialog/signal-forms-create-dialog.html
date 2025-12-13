@@ -23,6 +23,11 @@
           <mat-option [value]="genre">{{ genre }}</mat-option>
         }
       </mat-select>
+      @if (movieForm.genre().dirty() && movieForm.genre().touched()) {
+        @for (error of movieForm.title().errors(); track error.kind) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
     </mat-form-field>
 
     <mat-form-field>
@@ -32,6 +37,11 @@
           <mat-option [value]="streamingService">{{ streamingService }}</mat-option>
         }
       </mat-select>
+      @if (movieForm.streamingService().dirty() && movieForm.streamingService().touched()) {
+        @for (error of movieForm.title().errors(); track error.kind) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
     </mat-form-field>
 
     <mat-form-field>
@@ -43,6 +53,11 @@
         [field]="movieForm.runtime | nullableField"
       >
       <mat-hint>In minutes</mat-hint>
+      @if (movieForm.runtime().dirty() && movieForm.runtime().touched()) {
+        @for (error of movieForm.title().errors(); track error.kind) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
     </mat-form-field>
 
     <mat-form-field>
@@ -52,6 +67,11 @@
           <mat-option [value]="priority">{{ priority }}</mat-option>
         }
       </mat-select>
+      @if (movieForm.priority().dirty() && movieForm.priority().touched()) {
+        @for (error of movieForm.title().errors(); track error.kind) {
+          <mat-error>{{ error.message }}</mat-error>
+        }
+      }
     </mat-form-field>
   </form>
 </mat-dialog-content>

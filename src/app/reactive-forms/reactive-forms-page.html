@@ -48,10 +48,9 @@
               <div class="form-entry select-box-container">
                 <mat-label class="select-box-label">Genre *</mat-label>
                 <div class="select-box-content">
-                  <app-select-box
-                    [entries]="movieGenres()"
-                    [selectedEntry]="[entry.controls.genre.getRawValue() ?? '']"
-                    (selectedEntryChange)="onMovieGenreSelect($event[0], entry.controls.genre)"
+                  <app-reactive-select-box
+                  [entries]="movieGenreValues"
+                  [formControl]="entry.controls.genre"
                   />
                   @if (entry.controls.genre.hasError('required')) {
                     <mat-error>The genre is required!</mat-error>
@@ -62,10 +61,9 @@
               <div class="form-entry select-box-container">
                 <mat-label class="select-box-label">Where to watch *</mat-label>
                 <div class="select-box-content">
-                  <app-select-box
-                    [entries]="streamingServices()"
-                    [selectedEntry]="[entry.controls.streamingService.getRawValue() ?? '']"
-                    (selectedEntryChange)="onSteamingServiceSelect($event[0], entry.controls.streamingService)"
+                  <app-reactive-select-box
+                    [entries]="streamingServiceValues"
+                    [formControl]="entry.controls.streamingService"
                   />
                   @if (entry.controls.streamingService.hasError('required')) {
                     <mat-error>The streaming service is required!</mat-error>
@@ -87,11 +85,10 @@
               <div class="form-entry select-box-container">
                 <mat-label class="select-box-label">Priority *</mat-label>
                 <div class="select-box-content">
-                  <app-select-box
-                    [entries]="priorityLevels()"
-                    [selectedEntry]="[entry.controls.priority.getRawValue() ?? '']"
-                    (selectedEntryChange)="onPriorityLevelSelect($event[0], entry.controls.priority)"
-                  />
+                  <app-reactive-select-box
+                    [entries]="priorityLevelValues"
+                    [formControl]="entry.controls.priority"
+                  ></app-reactive-select-box>
                   @if (entry.controls.priority.hasError('required')) {
                     <mat-error>The priority is required!</mat-error>
                   }

@@ -1,1 +1,150 @@
-<app-page-header title="Signal Form Watchlist" (addEntry)="onAddEntry()"/>
+<app-page-header
+  title="Signal Form Watchlist"
+  (addEntry)="onAddEntry()"
+  (save)="onSave()"
+  [hasChanges]="hasChanges()"
+/>
+<form>
+  <div ngAccordionGroup class="basic-accordion" [multiExpandable]="false">
+    @for (entry of movieForm.movies; track entry; let index = $index; let last = $last) {
+      @let movie = movies().movies[index];
+      <div ngAccordionTrigger [panelId]="`form-entry-${index}`" #trigger="ngAccordionTrigger"
+           [expanded]="true">
+        <app-accordion-title [isExpanded]="trigger.expanded()">
+          <div class="entry-header">
+            <div class="title-container">
+              <span class="entry-title">{{ movie.title }}</span>
+              <span class="entry-title"> - Watched: </span>
+              @if (movie.watched) {
+                <mat-icon fontIcon="check" class="watched-icon" />
+              } @else {
+                <mat-icon fontIcon="close" class="not-watched-icon" />
+              }
+            </div>
+            <mat-icon
+              class="delete-icon"
+              fontIcon="delete"
+              (click)="onDelete(index)"
+              (keydown.enter)="onDelete(index)"
+            />
+          </div>
+        </app-accordion-title>
+      </div>
+      <div ngAccordionPanel [panelId]="`form-entry-${index}`">
+        <ng-template ngAccordionContent>
+          <div class="movie-entry">
+            <div class="movie-form">
+              <mat-form-field>
+                <mat-label>Title</mat-label>
+                <input
+                  matInput
+                  placeholder="Add the title of the movie"
+                  [field]="entry.title"
+                >
+                @if (entry.title().dirty() && entry.title().touched()) {
+                  @for (error of entry.title().errors(); track error.kind) {
+                    <mat-error>{{ error.message }}</mat-error>
+                  }
+                }
+              </mat-form-field>
+
+              <div class="form-entry select-box-container">
+                <mat-label class="select-box-label">Genre *</mat-label>
+                <div class="select-box-content">
+                  <app-signal-select-box
+                    [entries]="movieGenreValues"
+                    [field]="entry.genre"
+                  />
+                  @if (entry.genre().dirty() && entry.genre().touched()) {
+                    @for (error of entry.streamingService().errors(); track error.kind) {
+                      <mat-error>{{ error.message }}</mat-error>
+                    }
+                  }
+                </div>
+              </div>
+
+              <div class="form-entry select-box-container">
+                <mat-label class="select-box-label">Where to watch *</mat-label>
+                <div class="select-box-content">
+                  <app-signal-select-box
+                    [entries]="streamingServiceValues"
+                    [field]="entry.streamingService"
+                  />
+                  @if (entry.streamingService().dirty() && entry.streamingService().touched()) {
+                    @for (error of entry.streamingService().errors(); track error.kind) {
+                      <mat-error>{{ error.message }}</mat-error>
+                    }
+                  }
+                </div>
+              </div>
+
+              <mat-form-field>
+                <mat-label>Runtime</mat-label>
+                <input
+                  matInput
+                  type="number"
+                  placeholder="Add the runtime of the movie"
+                  [field]="entry.runtime | nullableField"
+                >
+                <mat-hint>In minutes</mat-hint>
+              </mat-form-field>
+
+              <div class="form-entry select-box-container">
+                <mat-label class="select-box-label">Priority *</mat-label>
+                <div class="select-box-content">
+                  <app-signal-select-box
+                    [entries]="priorityLevelValues"
+                    [field]="entry.priority"
+                  />
+                  @if (entry.priority().dirty() && entry.priority().touched()) {
+                    @for (error of entry.priority().errors(); track error.kind) {
+                      <mat-error>{{ error.message }}</mat-error>
+                    }
+                  }
+                </div>
+              </div>
+
+              <div class="form-entry watched-container">
+                <div class="content">
+                  <mat-checkbox [field]="entry.watched">Watched</mat-checkbox>
+                </div>
+                <div class="error"></div>
+              </div>
+
+              <div class="form-entry rating-container">
+                <div class="content">
+                  <mat-label>Rating</mat-label>
+                  <app-reactive-form-rating [field]="entry.rating" />
+                </div>
+                <div class="error">
+                  @if (entry.rating().dirty() && entry.rating().touched()) {
+                    @for (error of entry.rating().errors(); track error.kind) {
+                      <mat-error>{{ error.message }}</mat-error>
+                    }
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+          @if (!last) {
+            <hr>
+          }
+        </ng-template>
+      </div>
+    } @empty {
+      <div ngAccordionTrigger panelId="empty" #triggerEmpty="ngAccordionTrigger"
+           [expanded]="true">
+        <app-accordion-title [isExpanded]="triggerEmpty.expanded()">
+          No entry.
+        </app-accordion-title>
+      </div>
+      <div ngAccordionPanel panelId="empty">
+        <ng-template ngAccordionContent>
+          <div class="movie-entry">
+            There are no entries in your watchlist!
+          </div>
+        </ng-template>
+      </div>
+    }
+  </div>
+</form>
