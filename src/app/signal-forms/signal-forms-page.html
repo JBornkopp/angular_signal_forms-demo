@@ -114,7 +114,7 @@
               <div class="form-entry rating-container">
                 <div class="content">
                   <mat-label>Rating</mat-label>
-                  <app-reactive-form-rating [field]="entry.rating" />
+                  <app-signal-form-rating [field]="entry.rating" />
                 </div>
                 <div class="error">
                   @if (entry.rating().dirty() && entry.rating().touched()) {

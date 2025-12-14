@@ -10,9 +10,11 @@ import { MatIcon } from '@angular/material/icon';
   styleUrl: './signal-form-rating.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SignalFormRating implements FormValueControl<number> {
-  public value = model<number>(0);
+export class SignalFormRating implements FormValueControl<number | null> {
+  public value = model<number | null>(null);
   public disabled = input<boolean>(false);
+  public dirty = model<boolean>(false);
+  public touched = model<boolean>(false);
   public maxRating = input(5);
 
   protected hoveredRating = signal<number | null>(null);
@@ -24,9 +26,11 @@ export class SignalFormRating implements FormValueControl<number> {
     return hovered !== null ? hovered : selected !== null ? selected : 0;
   });
 
-  protected setRating(newRating: number): void {
+  protected setRating(newRating: number | null): void {
     if (!this.disabled()) {
       this.value.set(newRating);
+      this.dirty.set(true);
+      this.touched.set(true);
     }
   }
 

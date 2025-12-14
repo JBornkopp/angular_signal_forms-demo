@@ -4,7 +4,7 @@
   class="rating"
 >
   @for (_ of ratingArray(); let index = $index; track index) {
-    @let filled = index < hoveredRatingOrSelectedRating();
+    @let filled = index < hoveredRatingOrSelectedRating() && value() !== null;
     <mat-icon
       class="star"
       role="radio"
@@ -12,11 +12,11 @@
       [attr.aria-checked]="value() === index + 1"
       (click)="setRating(index + 1)"
       (keydown.enter)="setRating(index + 1)"
-      (mouseenter)="startHover(index +1)"
+      (mouseenter)="startHover(index + 1)"
       (mouseleave)="endHover()"
       [fontIcon]=" filled ? 'star' : 'star_outline'"
       [ngClass]="{ filled: filled, disabled: disabled() }"
     ></mat-icon>
   }
 </div>
-<mat-icon class="undo" fontIcon="undo_outline" (click)="setRating(0)"/>
+<mat-icon class="undo" fontIcon="undo_outline" (click)="setRating(null)"/>

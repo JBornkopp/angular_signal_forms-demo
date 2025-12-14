@@ -2,6 +2,7 @@ import { Component, computed, DestroyRef, effect, inject, OnInit, signal } from 
 import { PageHeader } from '../shared/page-header/page-header';
 import { MatDialog } from '@angular/material/dialog';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { SignalFormRating } from './signal-form-rating/signal-form-rating';
 import { SignalFormsCreateDialog } from './signal-forms-create-dialog/signal-forms-create-dialog';
 import {
   applyEach,
@@ -24,7 +25,6 @@ import { FormsModule } from '@angular/forms';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatError, MatFormField, MatHint, MatInput, MatLabel } from '@angular/material/input';
 import { MatIcon } from '@angular/material/icon';
-import { ReactiveFormRating } from '../reactive-forms/reactive-form-rating/reactive-form-rating';
 import { SignalFormCreatedMovie } from './signal-forms-create-dialog/signal-form-created-movie';
 import { LocalStorage } from '../shared/local-storage.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -54,8 +54,8 @@ import { isEqual } from 'lodash';
     SignalSelectBox,
     MatHint,
     MatCheckbox,
-    ReactiveFormRating,
     NullableFieldCoercionPipe,
+    SignalFormRating
   ],
   templateUrl: './signal-forms-page.html',
   styleUrl: './signal-forms-page.scss',
