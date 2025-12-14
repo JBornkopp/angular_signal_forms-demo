@@ -1,6 +1,6 @@
 <h3 mat-dialog-title>Add Entry</h3>
 <mat-dialog-content>
-  <form>
+  <div class="form">
     <mat-form-field>
       <mat-label>Title</mat-label>
       <input
@@ -8,12 +8,13 @@
         placeholder="Add the title of the movie"
         [field]="movieForm.title"
       >
-      @if (movieForm.title().dirty() && movieForm.title().touched()) {
-        @for (error of movieForm.title().errors(); track error.kind) {
-          <mat-error>{{ error.message }}</mat-error>
-        }
+      @if (movieForm.title().invalid() && movieForm.title().touched()) {
+        <mat-error>
+          @for (error of movieForm.title().errors(); track error.kind) {
+            {{ error.message }}
+          }
+        </mat-error>
       }
-      <mat-error></mat-error>
     </mat-form-field>
 
     <mat-form-field>
@@ -23,10 +24,12 @@
           <mat-option [value]="genre">{{ genre }}</mat-option>
         }
       </mat-select>
-      @if (movieForm.genre().dirty() && movieForm.genre().touched()) {
-        @for (error of movieForm.title().errors(); track error.kind) {
-          <mat-error>{{ error.message }}</mat-error>
-        }
+      @if (movieForm.genre().invalid() && movieForm.genre().touched()) {
+        <mat-error>
+          @for (error of movieForm.genre().errors(); track error.kind) {
+            {{ error.message }}
+          }
+        </mat-error>
       }
     </mat-form-field>
 
@@ -37,10 +40,12 @@
           <mat-option [value]="streamingService">{{ streamingService }}</mat-option>
         }
       </mat-select>
-      @if (movieForm.streamingService().dirty() && movieForm.streamingService().touched()) {
-        @for (error of movieForm.title().errors(); track error.kind) {
-          <mat-error>{{ error.message }}</mat-error>
-        }
+      @if (movieForm.streamingService().invalid() && movieForm.streamingService().touched()) {
+        <mat-error>
+          @for (error of movieForm.streamingService().errors(); track error.kind) {
+            {{ error.message }}
+          }
+        </mat-error>
       }
     </mat-form-field>
 
@@ -53,10 +58,12 @@
         [field]="movieForm.runtime | nullableField"
       >
       <mat-hint>In minutes</mat-hint>
-      @if (movieForm.runtime().dirty() && movieForm.runtime().touched()) {
-        @for (error of movieForm.title().errors(); track error.kind) {
-          <mat-error>{{ error.message }}</mat-error>
-        }
+      @if (movieForm.runtime().invalid() && movieForm.runtime().touched()) {
+        <mat-error>
+          @for (error of movieForm.runtime().errors(); track error.kind) {
+            {{ error.message }}
+          }
+        </mat-error>
       }
     </mat-form-field>
 
@@ -67,15 +74,18 @@
           <mat-option [value]="priority">{{ priority }}</mat-option>
         }
       </mat-select>
-      @if (movieForm.priority().dirty() && movieForm.priority().touched()) {
-        @for (error of movieForm.title().errors(); track error.kind) {
-          <mat-error>{{ error.message }}</mat-error>
-        }
+      @if (movieForm.priority().invalid() && movieForm.priority().touched()) {
+        <mat-error>
+          @for (error of movieForm.priority().errors(); track error.kind) {
+            {{ error.message }}
+          }
+        </mat-error>
+
       }
     </mat-form-field>
-  </form>
+  </div>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button matButton mat-dialog-close>Cancel</button>
+  <button matButton (click)="onClose()">Cancel</button>
   <button matButton (click)="onCreate()">Create</button>
 </mat-dialog-actions>

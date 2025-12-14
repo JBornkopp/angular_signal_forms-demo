@@ -10,15 +10,15 @@ import {
   Field,
   form,
   min,
-  required,
-  validate,
+  required, submit,
+  validate
 } from '@angular/forms/signals';
 import { SignalFormMovie } from './signal-form-movie';
 import {
   AccordionContent,
   AccordionGroup,
   AccordionPanel,
-  AccordionTrigger,
+  AccordionTrigger
 } from '@angular/aria/accordion';
 import { AccordionTitle } from '../shared/accordion-title/accordion-title';
 import { FormsModule } from '@angular/forms';
@@ -58,7 +58,7 @@ import { isEqual } from 'lodash';
     SignalFormRating
   ],
   templateUrl: './signal-forms-page.html',
-  styleUrl: './signal-forms-page.scss',
+  styleUrl: './signal-forms-page.scss'
 })
 export class SignalFormsPage {
   private readonly dialog = inject(MatDialog);
@@ -117,23 +117,27 @@ export class SignalFormsPage {
       .subscribe((result: SignalFormCreatedMovie | undefined) => {
         if (result !== undefined) {
           this.movies.update((prevValue) => ({
-            movies: [...prevValue.movies, { ...result, rating: null, watched: false }],
+            movies: [...prevValue.movies, { ...result, rating: null, watched: false }]
           }));
         }
       });
   }
 
   protected onDelete(index: number) {
-    this.movies.update((movies) => ({ movies: movies.movies.splice(index, 1) }));
     const title = this.movies().movies[index].title;
+    this.movies.update((movies) => ({ movies: movies.movies.length === 1 ? [] : movies.movies.splice(index, 1) }));
     this.snackBar.open(`${title} was removed!`, '', {
       horizontalPosition: 'end',
-      verticalPosition: 'bottom',
+      verticalPosition: 'bottom'
     });
   }
 
   protected onSave(): void {
     this.savedMoviesValue.set(this.movies().movies);
+    this.snackBar.open(`Form was saved!`, '', {
+      horizontalPosition: 'end',
+      verticalPosition: 'bottom'
+    });
   }
 
   protected readonly movieGenreValues = movieGenreValues;

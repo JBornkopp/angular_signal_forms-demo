@@ -6,7 +6,7 @@ import {
   MatDialogRef,
   MatDialogTitle
 } from '@angular/material/dialog';
-import { MatFormField, MatHint, MatInput, MatLabel } from '@angular/material/input';
+import { MatError, MatFormField, MatHint, MatInput, MatLabel } from '@angular/material/input';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MovieGenre, movieGenres } from '../../shared/entities/movie-genre';
 import { MatOption, MatSelect } from '@angular/material/select';
@@ -30,7 +30,8 @@ export type ReactiveFormsCreatedMovie = ReturnType<
     MatHint,
     ReactiveFormsModule,
     MatSelect,
-    MatOption
+    MatOption,
+    MatError
   ],
   templateUrl: './reactive-form-create-dialog.html',
   styleUrl: './reactive-form-create-dialog.scss',
@@ -49,6 +50,9 @@ export class ReactiveFormCreateDialog {
   });
 
   protected onCreate(): void {
+    this.movieForm.markAllAsTouched();
+    this.movieForm.markAllAsDirty();
+
     if (this.movieForm.valid) {
       this.dialogRef.close(this.movieForm.getRawValue());
     }

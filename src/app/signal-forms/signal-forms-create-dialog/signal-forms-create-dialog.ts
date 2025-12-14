@@ -1,15 +1,14 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import {
   MatDialogActions,
-  MatDialogClose,
   MatDialogContent,
   MatDialogRef,
-  MatDialogTitle,
+  MatDialogTitle
 } from '@angular/material/dialog';
 import { MatButton } from '@angular/material/button';
 import { NullableFieldCoercionPipe } from '../singal-forms-nullable-field.pipe';
 import { SignalFormCreatedMovie } from './signal-form-created-movie';
-import { Field, form, min, required } from '@angular/forms/signals';
+import { Field, form, min, required, submit } from '@angular/forms/signals';
 import { FormsModule } from '@angular/forms';
 import { MatError, MatFormField, MatHint, MatInput, MatLabel } from '@angular/material/input';
 import { MatOption } from '@angular/material/core';
@@ -25,7 +24,6 @@ import { movieGenres } from '../../shared/entities/movie-genre';
     MatDialogContent,
     MatDialogActions,
     MatButton,
-    MatDialogClose,
     FormsModule,
     MatFormField,
     MatInput,
@@ -35,7 +33,7 @@ import { movieGenres } from '../../shared/entities/movie-genre';
     Field,
     MatError,
     MatHint,
-    NullableFieldCoercionPipe,
+    NullableFieldCoercionPipe
   ],
   templateUrl: './signal-forms-create-dialog.html',
   styleUrl: './signal-forms-create-dialog.scss',
@@ -69,9 +67,11 @@ export class SignalFormsCreateDialog {
   });
 
   protected onCreate(): void {
-    if (this.movieForm().valid()) {
-      this.dialogRef.close(this.createdMovie());
-    }
+    submit(this.movieForm, async () => {}).then(() => {
+      if (this.movieForm().valid()) {
+        this.dialogRef.close(this.createdMovie());
+      }
+    });
   }
 
   protected onClose(): void {

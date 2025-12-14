@@ -35,7 +35,7 @@ export class ReactiveFormRating implements ControlValueAccessor {
 
   public writeValue(newRating: number): void {
     if (newRating < 1) {
-      this.rating.set(1);
+      this.rating.set(0);
     } else if (newRating > this.maxRating()) {
       this.rating.set(this.maxRating());
     } else {

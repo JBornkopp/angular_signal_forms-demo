@@ -40,7 +40,7 @@
                   placeholder="Add the title of the movie"
                   [formControl]="entry.controls.title"
                 >
-                @if (entry.controls.title.hasError('required')) {
+                @if (entry.controls.title.hasError('required') && entry.controls.title.touched && entry.controls.title.dirty) {
                   <mat-error>The title is required!</mat-error>
                 }
               </mat-form-field>
@@ -52,7 +52,7 @@
                   [entries]="movieGenreValues"
                   [formControl]="entry.controls.genre"
                   />
-                  @if (entry.controls.genre.hasError('required')) {
+                  @if (entry.controls.genre.hasError('required') && entry.controls.genre.touched && entry.controls.genre.dirty) {
                     <mat-error>The genre is required!</mat-error>
                   }
                 </div>
@@ -65,7 +65,7 @@
                     [entries]="streamingServiceValues"
                     [formControl]="entry.controls.streamingService"
                   />
-                  @if (entry.controls.streamingService.hasError('required')) {
+                  @if (entry.controls.streamingService.hasError('required') && entry.controls.streamingService.touched && entry.controls.streamingService.dirty) {
                     <mat-error>The streaming service is required!</mat-error>
                   }
                 </div>
@@ -80,6 +80,9 @@
                   [formControl]="entry.controls.runtime"
                 >
                 <mat-hint>In minutes</mat-hint>
+                @if (entry.controls.runtime.hasError('min') && entry.controls.runtime.touched && entry.controls.runtime.dirty) {
+                  <mat-error>Runtime must be at least 1 minute</mat-error>
+                }
               </mat-form-field>
 
               <div class="form-entry select-box-container">
@@ -89,7 +92,7 @@
                     [entries]="priorityLevelValues"
                     [formControl]="entry.controls.priority"
                   ></app-reactive-select-box>
-                  @if (entry.controls.priority.hasError('required')) {
+                  @if (entry.controls.priority.hasError('required') && entry.controls.priority.touched && entry.controls.priority.dirty) {
                     <mat-error>The priority is required!</mat-error>
                   }
                 </div>
@@ -108,7 +111,7 @@
                   <app-reactive-form-rating [formControl]="entry.controls.rating" />
                 </div>
                 <div class="error">
-                  @if (entry.controls.rating.hasError('rating-applied-but-not-watched')) {
+                  @if (entry.controls.rating.hasError('rating-applied-but-not-watched') && entry.controls.rating.touched && entry.controls.rating.dirty) {
                     <mat-error>The rating can only be applied when the movie was watched!</mat-error>
                   }
                 </div>

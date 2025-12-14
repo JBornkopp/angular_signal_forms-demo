@@ -42,9 +42,11 @@
                   [field]="entry.title"
                 >
                 @if (entry.title().dirty() && entry.title().touched()) {
-                  @for (error of entry.title().errors(); track error.kind) {
-                    <mat-error>{{ error.message }}</mat-error>
-                  }
+                  <mat-error>
+                    @for (error of entry.title().errors(); track error.kind) {
+                      {{ error.message }}
+                    }
+                  </mat-error>
                 }
               </mat-form-field>
 
@@ -56,9 +58,11 @@
                     [field]="entry.genre"
                   />
                   @if (entry.genre().dirty() && entry.genre().touched()) {
-                    @for (error of entry.streamingService().errors(); track error.kind) {
-                      <mat-error>{{ error.message }}</mat-error>
-                    }
+                    <mat-error>
+                      @for (error of entry.genre().errors(); track error.kind) {
+                        {{ error.message }}
+                      }
+                    </mat-error>
                   }
                 </div>
               </div>
@@ -71,9 +75,11 @@
                     [field]="entry.streamingService"
                   />
                   @if (entry.streamingService().dirty() && entry.streamingService().touched()) {
-                    @for (error of entry.streamingService().errors(); track error.kind) {
-                      <mat-error>{{ error.message }}</mat-error>
-                    }
+                    <mat-error>
+                      @for (error of entry.streamingService().errors(); track error.kind) {
+                        {{ error.message }}
+                      }
+                    </mat-error>
                   }
                 </div>
               </div>
@@ -87,6 +93,13 @@
                   [field]="entry.runtime | nullableField"
                 >
                 <mat-hint>In minutes</mat-hint>
+                @if (entry.runtime().dirty() && entry.runtime().touched()) {
+                  <mat-error>
+                    @for (error of entry.runtime().errors(); track error.kind) {
+                      {{ error.message }}
+                    }
+                  </mat-error>
+                }
               </mat-form-field>
 
               <div class="form-entry select-box-container">
@@ -97,9 +110,11 @@
                     [field]="entry.priority"
                   />
                   @if (entry.priority().dirty() && entry.priority().touched()) {
-                    @for (error of entry.priority().errors(); track error.kind) {
-                      <mat-error>{{ error.message }}</mat-error>
-                    }
+                    <mat-error>
+                      @for (error of entry.priority().errors(); track error.kind) {
+                        {{ error.message }}
+                      }
+                    </mat-error>
                   }
                 </div>
               </div>
@@ -118,9 +133,11 @@
                 </div>
                 <div class="error">
                   @if (entry.rating().dirty() && entry.rating().touched()) {
-                    @for (error of entry.rating().errors(); track error.kind) {
-                      <mat-error>{{ error.message }}</mat-error>
-                    }
+                    <mat-error>
+                      @for (error of entry.rating().errors(); track error.kind) {
+                        {{ error.message }}
+                      }
+                    </mat-error>
                   }
                 </div>
               </div>

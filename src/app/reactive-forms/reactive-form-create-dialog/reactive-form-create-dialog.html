@@ -8,6 +8,9 @@
         placeholder="Add the title of the movie"
         [formControl]="movieForm.controls.title"
       >
+      @if (movieForm.controls.title.hasError('required') && movieForm.controls.title.touched && movieForm.controls.title.dirty) {
+        <mat-error>The title is required!</mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field>
@@ -17,6 +20,9 @@
           <mat-option [value]="genre">{{ genre }}</mat-option>
         }
       </mat-select>
+      @if (movieForm.controls.genre.hasError('required') && movieForm.controls.genre.touched && movieForm.controls.genre.dirty) {
+        <mat-error>The genre is required!</mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field>
@@ -26,6 +32,9 @@
           <mat-option [value]="streamingService">{{ streamingService }}</mat-option>
         }
       </mat-select>
+      @if (movieForm.controls.streamingService.hasError('required') && movieForm.controls.streamingService.touched && movieForm.controls.streamingService.dirty) {
+        <mat-error>The streaming service is required!</mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field>
@@ -37,6 +46,9 @@
         [formControl]="movieForm.controls.runtime"
       >
       <mat-hint>In minutes</mat-hint>
+      @if (movieForm.controls.runtime.hasError('min') && movieForm.controls.runtime.touched && movieForm.controls.runtime.dirty) {
+        <mat-error>Runtime must be at least 1 minute</mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field>
@@ -46,6 +58,9 @@
           <mat-option [value]="priority">{{ priority }}</mat-option>
         }
       </mat-select>
+      @if (movieForm.controls.priority.hasError('required') && movieForm.controls.priority.touched && movieForm.controls.priority.dirty) {
+        <mat-error>The priority is required!</mat-error>
+      }
     </mat-form-field>
   </form>
 </mat-dialog-content>
