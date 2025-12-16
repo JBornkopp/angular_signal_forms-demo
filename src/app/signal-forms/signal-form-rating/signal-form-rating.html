@@ -4,7 +4,7 @@
   class="rating"
 >
   @for (_ of ratingArray(); let index = $index; track index) {
-    @let filled = index < hoveredRatingOrSelectedRating() && value() !== null;
+    @let filled = index < hoveredRatingOrSelectedRating();
     <mat-icon
       class="star"
       role="radio"
