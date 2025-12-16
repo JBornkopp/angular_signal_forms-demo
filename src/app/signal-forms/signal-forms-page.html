@@ -9,7 +9,7 @@
     @for (entry of movieForm.movies; track entry; let index = $index) {
       @let movie = movies().movies[index];
       <div ngAccordionTrigger [panelId]="`form-entry-${index}`" #trigger="ngAccordionTrigger"
-           [expanded]="true">
+           [expanded]="index === autoExpandedFormEntry()">
         <app-accordion-title [isExpanded]="trigger.expanded()">
           <div class="entry-header">
             <div class="title-container">

@@ -71,6 +71,8 @@ export class SignalFormsPage {
   protected movies = signal<{ movies: SignalFormMovie[] }>({ movies: [] });
   private savedMoviesValue = signal<SignalFormMovie[]>([]);
   protected hasChanges = computed(() => !isEqual(this.movies().movies, this.savedMoviesValue()));
+  protected readonly autoExpandedFormEntry = signal<number>(0);
+
   protected movieForm = form(this.movies, (schemaPath) => {
     applyEach(schemaPath.movies, (schemaPath) => {
       // title
@@ -119,6 +121,7 @@ export class SignalFormsPage {
           this.movies.update((prevValue) => ({
             movies: [...prevValue.movies, { ...result, rating: null, watched: false }],
           }));
+          this.autoExpandedFormEntry.set(this.movies().movies.length - 1);
         }
       });
   }

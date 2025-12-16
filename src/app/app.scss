@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   height: 100dvh;
+  overflow: hidden;
 
   header {
     display: flex;
@@ -22,7 +23,14 @@
   }
 
   main {
+    display: flex;
     padding: 8px 16px;
     flex: 1;
+    overflow: hidden;
+
+
+    router-outlet {
+      flex: 1;
+    }
   }
 }
