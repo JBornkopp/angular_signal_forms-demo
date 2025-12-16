@@ -133,7 +133,7 @@ export class ReactiveFormsPage implements OnInit {
 
   protected onAddEntry(): void {
     this.dialog
-      .open(ReactiveFormCreateDialog)
+      .open(ReactiveFormCreateDialog, { width: '500px' })
       .afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((result: ReactiveFormsCreatedMovie | undefined) => {

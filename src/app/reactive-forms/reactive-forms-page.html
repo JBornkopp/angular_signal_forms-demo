@@ -6,7 +6,7 @@
 />
 <form>
   <div ngAccordionGroup class="basic-accordion" [multiExpandable]="false">
-    @for (entry of movieForm().controls; track entry; let index = $index; let last = $last) {
+    @for (entry of movieForm().controls; track entry; let index = $index) {
       <div ngAccordionTrigger [panelId]="`form-entry-${index}`" #trigger="ngAccordionTrigger"
            [expanded]="index === autoExpandedFormEntry()">
         <app-accordion-title [isExpanded]="trigger.expanded()">
@@ -118,9 +118,6 @@
               </div>
             </div>
           </div>
-          @if (!last) {
-            <hr>
-          }
         </ng-template>
       </div>
     } @empty {
